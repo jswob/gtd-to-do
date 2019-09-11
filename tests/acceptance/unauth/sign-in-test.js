@@ -7,9 +7,9 @@ module('Acceptance | unauth/sign in', function(hooks) {
   setupApplicationTest(hooks);
 
   test('should redirect to auth.collection route if user is logged in', async function(assert) {
-    await visit('/unauth/sign-in');
-
     await authenticateSession();
+    
+    await visit('/unauth/sign-in');
 
     assert.equal(currentURL(), '/auth/collection');
   });
