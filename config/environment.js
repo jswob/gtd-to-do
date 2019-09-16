@@ -25,6 +25,12 @@ module.exports = function(environment) {
       authenticationRoute: "unauth.sign-in",
       routeAfterAuthentication: "auth.collection",
       routeIfAlreadyAuthenticated: "auth.collection"
+    },
+    "ember-simple-auth-token": {
+      refreshAccessTokens: true,
+      refreshLeeway: 300,
+      serverTokenEndpoint: "http://localhost:8080/auth/login/",
+      serverTokenRefreshEndpoint: "/auth/refresh-token/"
     }
   };
 
@@ -40,6 +46,12 @@ module.exports = function(environment) {
 
     ENV["ember-cli-mirage"] = {
       enabled: true
+    };
+
+    ENV["ember-simple-auth-token"] = {
+      refreshAccessTokens: false,
+      tokenExpirationInvalidateSession: false,
+      serverTokenEndpoint: "http://localhost:8080/auth/login/"
     };
 
     // keep test console output quieter
