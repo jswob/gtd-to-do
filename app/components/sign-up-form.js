@@ -5,6 +5,7 @@ import { A } from "@ember/array";
 
 export default Component.extend({
   store: service(),
+  session: service(),
 
   rePasswordErrors: computed("user.password", "rePassword", function() {
     const password = this.get("user.password");
@@ -38,12 +39,21 @@ export default Component.extend({
   actions: {
     async createUser() {
       let user = this.get("user");
-      if (
-        user.get("email") &&
-        user.get("password") &&
-        this.get("rePasswordErrors")
-      ) {
-        return user.save().catch(error => error);
+      try {
+        if (
+          user.get("email") &&
+          user.get("password") &&
+          this.get("rePasswordErrors")
+        ) {
+          await user.save();
+          await this.session.authenticate("authenticator:token", {
+            username: user.email,
+            password: user.password
+          });
+          return this.get("transitionAfterSignUp")();
+        }
+      } catch (error) {
+        return error;
       }
     }
   }
