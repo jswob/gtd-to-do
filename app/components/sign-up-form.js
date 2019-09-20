@@ -14,19 +14,6 @@ export default Component.extend({
     return A(["Password and repeat password must be equal"]);
   }),
 
-  emailErrorMessage: computed(
-    "user.{validations.attrs.email.errors.@each,errors.email.@each,email}",
-    function() {
-      const clientErrors = this.get("user.validations.attrs.email.errors");
-      const serverErrors = this.get("user.errors.email");
-      const email = this.get("user.email");
-      if (!email) return [];
-      else if (serverErrors) return [serverErrors[0].message];
-      else if (clientErrors.length) return [clientErrors[0].message];
-      return [];
-    }
-  ),
-
   init() {
     this._super(...arguments);
     const user = this.store.createRecord("user");
@@ -53,7 +40,7 @@ export default Component.extend({
           return this.get("transitionAfterSignUp")();
         }
       } catch (error) {
-        return error;
+        throw new Error(error);
       }
     }
   }
