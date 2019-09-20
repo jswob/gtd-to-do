@@ -1,5 +1,6 @@
 import DS from "ember-data";
 import { validator, buildValidations } from "ember-cp-validations";
+import { computed } from "@ember/object";
 
 const { Model, attr } = DS;
 
@@ -30,5 +31,33 @@ const Validations = buildValidations({
 
 export default Model.extend(Validations, {
   email: attr("string"),
-  password: attr("string")
+  password: attr("string"),
+
+  emailErrors: computed(
+    "errors.email.@each",
+    "validations.attrs.email.errors.@each",
+    function() {
+      const email = this.get("email");
+      const serverErrors = this.get("errors.email");
+      const clientErrors = this.get("validations.attrs.email.errors");
+      if (!email) return [];
+      else if (serverErrors) return [serverErrors[0].message];
+      else if (clientErrors.length) return [clientErrors[0].message];
+      return [];
+    }
+  ),
+
+  passwordErrors: computed(
+    "errors.password.@each",
+    "validations.attrs.password.errors.@each",
+    function() {
+      const password = this.get("password");
+      const serverErrors = this.get("errors.password");
+      const clientErrors = this.get("validations.attrs.password.errors");
+      if (!password) return [];
+      else if (serverErrors) return [serverErrors[0].message];
+      else if (clientErrors.length) return [clientErrors[0].message];
+      return [];
+    }
+  )
 });
