@@ -40,7 +40,7 @@ export default Component.extend({
           return this.get("transitionAfterSignUp")();
         }
       } catch (error) {
-        throw new Error(error);
+        return error;
       }
     }
   }

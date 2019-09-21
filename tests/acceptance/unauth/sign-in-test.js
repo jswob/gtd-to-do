@@ -69,8 +69,6 @@ module("Acceptance | unauth/sign in", function(hooks) {
 
     await click(".login-button");
 
-    console.log(this.element.querySelector(".password > .md-input-messages-animation"));
-
     assert.equal(
       this.element
         .querySelector(".password > .md-input-messages-animation")
