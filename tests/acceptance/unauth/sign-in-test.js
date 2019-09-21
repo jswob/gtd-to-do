@@ -103,4 +103,16 @@ module("Acceptance | unauth/sign in", function(hooks) {
       "should finish on main page"
     );
   });
+
+  test("should move to sign-up route after clicking on link", async function(assert) {
+    assert.expect(2);
+
+    await visit("/unauth/sign-in");
+
+    assert.equal(currentURL(), "/unauth/sign-in", "starts in /unauth/sign-in");
+
+    await click(".transition-link");
+
+    assert.equal(currentURL(), "/unauth/sign-up", "ends in /unauth/sign-up");
+  });
 });
