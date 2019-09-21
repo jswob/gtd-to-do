@@ -5,9 +5,11 @@ import {
   authenticateSession,
   currentSession
 } from "ember-simple-auth/test-support";
+import { setupMirage } from "ember-cli-mirage/test-support";
 
 module("Acceptance | unauth/sign in", function(hooks) {
   setupApplicationTest(hooks);
+  setupMirage(hooks);
 
   test("should redirect to auth.collection route if user is logged in", async function(assert) {
     await authenticateSession();
@@ -18,7 +20,36 @@ module("Acceptance | unauth/sign in", function(hooks) {
   });
 
   test("should correctly show errors from db", async function(assert) {
-    this.server.createList("post", 10);
+    this.server.createList("user", 10);
+    this.server.post(
+      "/auth/login",
+      (schema, request) => {
+        const errors = [];
+        const data = JSON.parse(request.requestBody);
+        const account = schema.users.findBy({ email: data.username });
+        if (!account) {
+          errors.push({
+            detail: "Could not find account with that email",
+            source: {
+              pointer: "data/attributes/email"
+            }
+          });
+
+          return { errors: errors };
+        }
+        if (account.password !== data.password) {
+          errors.push({
+            detail: "Bad password",
+            source: {
+              pointer: "data/attributes/password"
+            }
+          });
+
+          return { errors: errors };
+        }
+      },
+      422
+    );
 
     await visit("/unauth/sign-in");
     await fillIn(".email > input", "some100@some.some");
@@ -28,22 +59,21 @@ module("Acceptance | unauth/sign in", function(hooks) {
     await click(".login-button");
 
     assert.equal(
-      document.querySelector(".paper-input-error").textContent.trim(),
+      this.element.querySelector(".paper-input-error").textContent.trim(),
       "Could not find account with that email"
     );
 
     await fillIn(".email > input", "some1@some.some");
 
-    assert.equal(
-      document.querySelector(".paper-input-error").textContent.trim(),
-      ""
-    );
+    assert.equal(this.element.querySelector(".paper-input-error"), null);
 
     await click(".login-button");
 
+    console.log(this.element.querySelector(".password > .md-input-messages-animation"));
+
     assert.equal(
-      document
-        .querySelector(".password > .paper-input-error")
+      this.element
+        .querySelector(".password > .md-input-messages-animation")
         .textContent.trim(),
       "Bad password"
     );
