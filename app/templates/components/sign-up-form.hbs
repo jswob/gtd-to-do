@@ -1,7 +1,7 @@
 <h1 class="page-header">Zarejestruj się</h1>
 {{#paper-form onSubmit=(action "createUser") as |form|}}
-  {{form.input class="email" label="Email" value=this.user.email isTouched=user.emailErrors.lenght errors=user.emailErrors onChange=(action (mut this.user.email))}}
-  {{form.input class="password" type="password" label="Password" value=user.password isTouched=user.passwordErrors.lenght errors=user.passwordErrors onChange=(action (mut this.user.password)) }}
+  {{form.input class="email" label="Email" value=this.user.email isTouched=user.emailErrors.length errors=user.emailErrors onChange=(action (mut this.user.email))}}
+  {{form.input class="password" type="password" label="Password" value=user.password isTouched=user.passwordErrors.length errors=user.passwordErrors onChange=(action (mut this.user.password)) }}
   {{form.input class="re-password" type="password" label="Repeat password" value=this.rePassword errors=this.rePasswordErrors onChange=(action (mut this.rePassword)) }}
   {{#form.submit-button class="submit-button" raised=true primary=true}}Zarejestruj się{{/form.submit-button}}
 {{/paper-form}}

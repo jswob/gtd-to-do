@@ -1,0 +1,6 @@
+<h1 class="page-header">Zaloguj się</h1>
+{{#paper-form onSubmit=(action "signIn") as |form|}}
+{{form.input class="email" label="Email" value=user.email isTouched=user.emailErrors.length errors=user.emailErrors onChange=(action (mut user.email))}}
+{{form.input class="password" type="password" label="Password" value=user.password isTouched=user.passwordErrors.length errors=user.passwordErrors onChange=(action (mut user.password))}}
+{{#form.submit-button class="login-button" raised=true primary=true}}Zarejestruj się{{/form.submit-button}}
+{{/paper-form}}
