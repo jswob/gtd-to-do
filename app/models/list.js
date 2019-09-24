@@ -2,7 +2,7 @@ import DS from "ember-data";
 import { validator, buildValidations } from "ember-cp-validations";
 import { computed } from "@ember/object";
 
-const { Model, attr, hasMany, belongsTo } = DS;
+const { Model, attr /* , hasMany */, belongsTo } = DS;
 
 const Validations = buildValidations({
   label: {
@@ -10,22 +10,16 @@ const Validations = buildValidations({
     validators: [
       validator("length", {
         min: 1,
-        max: 45
+        max: 15
       })
     ]
-  },
-  color: {
-    description: "Color",
-    validators: [validator("presence", true)]
   }
 });
 
 export default Model.extend(Validations, {
   label: attr("string"),
-  color: attr("string"),
-  childrens: hasMany("collection", { inverse: "parent" }),
-  parent: belongsTo("collection", { inverse: "childrens" }),
-  lists: hasMany("list"),
+  //   tasks: hasMany("task"),
+  collection: belongsTo("collection"),
   owner: belongsTo("user"),
 
   labelErrors: computed(
@@ -36,20 +30,6 @@ export default Model.extend(Validations, {
       const serverErrors = this.get("errors.label");
       const clientErrors = this.get("validations.attrs.label.errors");
       if (!label) return [];
-      else if (serverErrors) return [serverErrors[0].message];
-      else if (clientErrors.length) return [clientErrors[0].message];
-      return [];
-    }
-  ),
-
-  colorErrors: computed(
-    "errors.color.@each",
-    "validations.attrs.color.errors.@each",
-    function() {
-      const color = this.get("color");
-      const serverErrors = this.get("errors.color");
-      const clientErrors = this.get("validations.attrs.color.errors");
-      if (!color) return [];
       else if (serverErrors) return [serverErrors[0].message];
       else if (clientErrors.length) return [clientErrors[0].message];
       return [];
