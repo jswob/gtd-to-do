@@ -2,7 +2,7 @@ import DS from "ember-data";
 import { validator, buildValidations } from "ember-cp-validations";
 import { computed } from "@ember/object";
 
-const { Model, attr } = DS;
+const { Model, attr, hasMany } = DS;
 
 const Validations = buildValidations({
   email: {
@@ -32,6 +32,9 @@ const Validations = buildValidations({
 export default Model.extend(Validations, {
   email: attr("string"),
   password: attr("string"),
+  collections: hasMany("collection"),
+  lists: hasMany("list"),
+  tasks: hasMany("tasks"),
 
   emailErrors: computed(
     "errors.email.@each",

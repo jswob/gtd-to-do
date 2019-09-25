@@ -2,7 +2,7 @@ import DS from "ember-data";
 import { validator, buildValidations } from "ember-cp-validations";
 import { computed } from "@ember/object";
 
-const { Model, attr /* , hasMany */, belongsTo } = DS;
+const { Model, attr, hasMany, belongsTo } = DS;
 
 const Validations = buildValidations({
   label: {
@@ -18,7 +18,7 @@ const Validations = buildValidations({
 
 export default Model.extend(Validations, {
   label: attr("string"),
-  //   tasks: hasMany("task"),
+  tasks: hasMany("task"),
   collection: belongsTo("collection"),
   owner: belongsTo("user"),
 
