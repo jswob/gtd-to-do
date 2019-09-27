@@ -1,0 +1,6 @@
+<h2 class="title">Edytuj kolor</h2>
+<div class="colors-list">
+  {{#each this.colors as |color|}}
+    <PickColorBox @selectColor={{action "selectColor"}} @selectedColor={{this.selectedColor}} @color={{color}} />
+  {{/each}}
+</div>
