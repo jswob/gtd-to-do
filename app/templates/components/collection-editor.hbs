@@ -1,0 +1,35 @@
+{{#if showDialog}}
+  {{#paper-dialog class="collection-editor" onClose=(action "closeDialog")}}
+    {{#paper-form onSubmit=(action "editCollection") as |form|}}
+      <h2>
+        Edytuj Zbiór
+      </h2>
+      {{form.input
+        class="label-input"
+        label="Collection label"
+        value=this.collection.label
+        isTouched=this.collection.labelErrors.length
+        errors=this.collection.labelErrors
+        onChange=(action (mut collection.label))
+      }}
+      <CollectionColorPicker @selectedColor={{this.collection.color}} />
+      {{#paper-dialog-actions class="layout-row"}}
+        {{#paper-button
+          class="cancel-button"
+          raised=true
+          onClick=(action "closeDialog")
+        }}
+          Anuluj
+        {{/paper-button}}
+        {{#form.submit-button
+          class="edit-button"
+          raised=true
+          primary=true
+          disabled=isModified
+        }}
+          Edytuj
+        {{/form.submit-button}}
+      {{/paper-dialog-actions}}
+    {{/paper-form}}
+  {{/paper-dialog}}
+{{/if}}

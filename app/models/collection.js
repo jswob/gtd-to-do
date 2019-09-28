@@ -10,8 +10,9 @@ const Validations = buildValidations({
     validators: [
       validator("length", {
         min: 1,
-        max: 45
-      })
+        max: 20
+      }),
+      validator("presence", true)
     ]
   },
   color: {
