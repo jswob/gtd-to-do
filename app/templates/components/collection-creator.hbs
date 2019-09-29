@@ -1,0 +1,47 @@
+{{#if showDialog}}
+  {{#paper-dialog class="collection-editor" onClose=(action "closeDialog")}}
+    {{#paper-form onSubmit=(action "editCollection") as |form|}}
+      <h2 class="form-title">
+        {{this.collection.parent.id}}
+        {{#if this.parent}}
+          Stwórz podzbiór
+        {{else}}
+          Stwórz zbiór
+        {{/if}}
+      </h2>
+      {{form.input
+        class="label-input"
+        label="Collection label"
+        value=this.collection.label
+        isTouched=this.collection.labelErrors.length
+        errors=this.collection.labelErrors
+        onChange=(action (mut collection.label))
+      }}
+      <CollectionColorPicker @selectedColor={{this.collection.color}} />
+      {{#if this.parent}}
+        <div class="warning-wrapper">
+          <h2 class="warning-title">
+            uwaga!
+          </h2>
+          <p class="warning-content">
+            Wszystkie dane ze zbioru "
+            {{this.parent.label}}
+            " zostaną przniesione do nowego podzbioru
+          </p>
+        </div>
+      {{/if}}
+      {{#paper-dialog-actions class="layout-row"}}
+        {{#paper-button
+          class="cancel-button"
+          raised=true
+          onClick=(action "closeDialog")
+        }}
+          Anuluj
+        {{/paper-button}}
+        {{#form.submit-button class="submit-button" raised=true primary=true}}
+          Edytuj
+        {{/form.submit-button}}
+      {{/paper-dialog-actions}}
+    {{/paper-form}}
+  {{/paper-dialog}}
+{{/if}}
