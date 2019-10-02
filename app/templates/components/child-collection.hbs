@@ -1,0 +1,54 @@
+<span class="child-collection-title">
+  {{this.collection.label}}
+</span>
+{{#paper-menu as |menu|}}
+  {{#menu.trigger}}
+    {{#paper-button class="menu-button" iconButton=true}}
+      {{paper-icon "menu"}}
+    {{/paper-button}}
+  {{/menu.trigger}}
+  {{#menu.content width=4 as |content|}}
+    {{#content.menu-item onClick="openEditorDialog"}}
+      <span>
+        Edytuj podzbiór
+      </span>
+    {{/content.menu-item}}
+    {{#content.menu-item class="menu-delete-button" onClick="openDeleteDialog"}}
+      <span>
+        Usuń podzbiór
+      </span>
+    {{/content.menu-item}}
+  {{/menu.content}}
+{{/paper-menu}}
+<CollectionEditor
+  @showDialog={{this.showEditorDialog}}
+  @collection={{this.collection}}
+/>
+{{#if showDeleteDialog}}
+  {{#paper-dialog
+    class="delete-collection-warning-message"
+    onClose=(action "closeDeleteDialog")
+  }}
+    <h1 class="title">
+      Usuwanie podzbioru
+    </h1>
+    <p class="content">
+      Jesteś pewien że chcesz usunąć podzbiór "
+      {{this.collection.label}}
+      " wraz z jego wszystkimi elementami
+    </p>
+    {{#paper-dialog-actions class="layout-row"}}
+      {{#paper-button
+        class="cancel-button"
+        raised=true
+        onClick=(action "closeDeleteDialog")
+      }}
+        Anuluj
+      {{/paper-button}}
+      {{#paper-button class="delete-button" onClick=(action "deleteCollection")
+      }}
+        Usuń
+      {{/paper-button}}
+    {{/paper-dialog-actions}}
+  {{/paper-dialog}}
+{{/if}}

@@ -37,25 +37,24 @@ module("Integration | Component | child-collection", function(hooks) {
 
     await render(hbs`<ChildCollection />`);
 
-    await click(".child-collection > .menu");
+    await click(".menu-button");
 
-    assert.equal($(".paper-menu > item").length, 2, "menu has 2 items");
+    assert.equal($("md-menu-item").length, 2, "menu has 2 items");
   });
 
   test("should display warning message when user tries to delete a collection", async function(assert) {
-    assert.expect(4);
+    assert.expect(3);
 
     const collection = this.owner
       .lookup("service:store")
       .createRecord("collection", { label: "test", color: "red" });
 
     this.set("collection", collection);
+    this.set("showDeleteDialog", true);
 
-    await render(hbs`<ChildCollection @collection={{this.collection}} />`);
-
-    await click(".child-collection > .menu");
-
-    await click(".child-collection > .menu > delete-button");
+    await render(
+      hbs`<ChildCollection @collection={{this.collection}} @showDeleteDialog={{this.showDeleteDialog}} />`
+    );
 
     assert.equal(
       $(".delete-collection-warning-message > .title")
@@ -69,29 +68,18 @@ module("Integration | Component | child-collection", function(hooks) {
       $(".delete-collection-warning-message > .content")
         .text()
         .trim(),
-      `Jesteś pewien że chcesz usunąć podzbiór "${collection.get(
-        "label"
-      )}" wraz z jego wszystkimi elementami`,
+      `Jesteś pewien że chcesz usunąć podzbiór "
+      ${collection.get("label")}
+      " wraz z jego wszystkimi elementami`,
       "content is correct is correct"
     );
 
-    await click(".delete-collection-warning-message > .cancel-button");
+    await click("md-dialog-actions > .cancel-button");
 
     assert.equal(
       $(".delete-collection-warning-message").length,
-      1,
+      0,
       "after clicking on cancel button warning box disappear"
-    );
-
-    await click(".child-collection > .menu");
-
-    await click(".child-collection > .menu > delete-button");
-
-    await click(".delete-collection-warning-message > .delete-button");
-
-    assert.notOk(
-      this.get("collection"),
-      "after clicking on delete button collection model is deleted"
     );
   });
 
@@ -103,12 +91,11 @@ module("Integration | Component | child-collection", function(hooks) {
       .createRecord("collection", { label: "test", color: "red" });
 
     this.set("collection", collection);
+    this.set("showEditorDialog", true);
 
-    await render(hbs`<ChildCollection @collection={{this.collection}} />`);
-
-    await click(".child-collection > .menu");
-
-    await click(".child-collection > .menu > edit-button");
+    await render(
+      hbs`<ChildCollection @collection={{this.collection}} @showEditorDialog={{this.showEditorDialog}} />`
+    );
 
     assert.equal($(".collection-editor").length, 1);
   });
