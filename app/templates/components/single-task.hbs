@@ -1,0 +1,8 @@
+<PaperCheckbox
+  class="checkbox"
+  @value={{this.task.isDone}}
+  @onChange={{action (mut task.isDone)}}
+/>
+<p class="description">
+  {{this.task.description}}
+</p>
